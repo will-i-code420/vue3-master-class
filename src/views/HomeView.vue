@@ -15,6 +15,14 @@ function getUser(id) {
 
 <template>
   <article v-for="thread in threads" :key="thread.id" class="col-large mt-1">
+    <!-- 
+      TODO: Implement Breadcrumbs
+      <ul class="breadcrumbs">
+              <li><a href="#"><i class="fa fa-home fa-btn"></i>Home</a></li>
+              <li><a href="category.html">Discussions</a></li>
+              <li class="active"><a href="#">Cooking</a></li>
+          </ul>
+    -->
     <h1 class="text-center">{{ thread.title }}</h1>
     <div class="post-list mt-1">
       <div v-for="postId in thread.posts" :key="postId" class="post">
@@ -206,5 +214,37 @@ function getUser(id) {
   opacity: 1;
   border-radius: 5px;
   cursor: pointer;
+}
+ul.breadcrumbs {
+  list-style: none;
+  overflow: auto;
+  font-size: 0;
+}
+
+ul.breadcrumbs li {
+  display: inline-block;
+  padding: 5px 0px;
+  font-weight: 100;
+}
+
+ul.breadcrumbs li:not(:last-of-type)::after {
+  content: '\f105';
+  font-family: FontAwesome;
+  margin: 0px 4px;
+  opacity: 0.6;
+}
+
+ul.breadcrumbs li a {
+  color: #57ad8d;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+ul.breadcrumbs li a:hover {
+  opacity: 1;
+}
+.link-unstyled,
+ul.breadcrumbs li a {
+  color: inherit;
 }
 </style>
