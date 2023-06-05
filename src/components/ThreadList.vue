@@ -1,8 +1,13 @@
 <script setup>
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
-const threads = reactive(sourceData.threads)
 const users = reactive(sourceData.users)
+const props = defineProps({
+  threads: {
+    type: Array,
+    required: true
+  }
+})
 function getUser(id) {
   return users.find((user) => user.id === id)
 }
@@ -11,7 +16,7 @@ function getUser(id) {
 <template>
   <div class="thread-list">
     <h2 class="list-title">Threads</h2>
-    <div v-for="thread in threads" :key="thread.id" class="thread">
+    <div v-for="thread in props.threads" :key="thread.id" class="thread">
       <div class="">
         <p>
           <router-link to="#">{{ thread.title }}</router-link>
@@ -22,7 +27,7 @@ function getUser(id) {
         </p>
       </div>
       <div class="activity">
-        <p class="replies-count">{{ thread.posts.length + 1 }}</p>
+        <p class="replies-count">{{ thread.posts.length - 1 }} replies</p>
         <img :src="getUser(thread.userId).avatar" alt="user profile avatar" class="avatar-medium" />
         <div class="">
           <p>
