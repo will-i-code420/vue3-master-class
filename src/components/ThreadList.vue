@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
 const users = reactive(sourceData.users)
-const props = defineProps({
+defineProps({
   threads: {
     type: Array,
     required: true
@@ -16,10 +16,12 @@ function getUser(id) {
 <template>
   <div class="thread-list">
     <h2 class="list-title">Threads</h2>
-    <div v-for="thread in props.threads" :key="thread.id" class="thread">
+    <div v-for="thread in threads" :key="thread.id" class="thread">
       <div class="">
         <p>
-          <router-link to="#">{{ thread.title }}</router-link>
+          <router-link :to="{ name: 'thread', params: { id: thread.id } }">{{
+            thread.title
+          }}</router-link>
         </p>
         <p class="text-faded">
           By <router-link to="#">{{ getUser(thread.userId).name }}</router-link
