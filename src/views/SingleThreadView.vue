@@ -30,6 +30,32 @@ const threadPosts = computed(() => {
     -->
     <h1 class="text-center">{{ thread.title }}</h1>
     <PostList :posts="threadPosts" />
+    <div class="col-full mt-1">
+      <h1>Create new thread in <i>Cooking</i></h1>
+
+      <form action="">
+        <div class="form-group">
+          <label for="thread_title">Title:</label>
+          <input type="text" id="thread_title" class="form-input" name="title" />
+        </div>
+
+        <div class="form-group">
+          <label for="thread_content">Content:</label>
+          <textarea
+            id="thread_content"
+            class="form-input"
+            name="content"
+            rows="8"
+            cols="140"
+          ></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-blue" type="submit" name="Publish">Publish</button>
+        </div>
+      </form>
+    </div>
   </article>
 </template>
 
