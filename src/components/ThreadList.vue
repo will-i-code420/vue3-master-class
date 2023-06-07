@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
-import BaseDateDisplay from './BaseDateDisplay.vue'
 const users = reactive(sourceData.users)
 defineProps({
   threads: {

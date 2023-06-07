@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
-import BaseDateDisplay from './BaseDateDisplay.vue'
 defineProps({
   posts: {
     type: Array,
