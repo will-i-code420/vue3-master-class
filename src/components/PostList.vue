@@ -1,6 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(relativeTime)
+dayjs.extend(localizedFormat)
 defineProps({
   posts: {
     type: Array,
@@ -10,6 +15,12 @@ defineProps({
 const users = reactive(sourceData.users)
 function getUser(id) {
   return users.find((user) => user.id === id)
+}
+function formatPublishedAt(timestamp) {
+  return dayjs.unix(timestamp).fromNow()
+}
+function displayFullDate(timestamp) {
+  return dayjs.unix(timestamp).format('llll')
 }
 </script>
 
@@ -39,8 +50,8 @@ function getUser(id) {
           ></router-link>
            -->
       </div>
-      <div class="post-date text-faded">
-        {{ post.publishedAt }}
+      <div class="post-date text-faded" :title="displayFullDate(post.publishedAt)">
+        {{ formatPublishedAt(post.publishedAt) }}
       </div>
       <!-- 
           TODO: Implement User Reactions

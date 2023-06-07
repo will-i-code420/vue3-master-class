@@ -1,6 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(relativeTime)
+dayjs.extend(localizedFormat)
 const users = reactive(sourceData.users)
 defineProps({
   threads: {
@@ -10,6 +15,12 @@ defineProps({
 })
 function getUser(id) {
   return users.find((user) => user.id === id)
+}
+function formatPublishedAt(timestamp) {
+  return dayjs.unix(timestamp).fromNow()
+}
+function displayFullDate(timestamp) {
+  return dayjs.unix(timestamp).format('llll')
 }
 </script>
 
@@ -25,7 +36,7 @@ function getUser(id) {
         </p>
         <p class="text-faded">
           By <router-link to="#">{{ getUser(thread.userId).name }}</router-link
-          >, {{ thread.publishedAt }}
+          >, {{ formatPublishedAt(thread.publishedAt) }}
         </p>
       </div>
       <div class="activity">
@@ -35,7 +46,9 @@ function getUser(id) {
           <p>
             <router-link to="#">{{ getUser(thread.userId).name }}</router-link>
           </p>
-          <p class="text-faded">{{ thread.publishedAt }}</p>
+          <p class="text-faded" :title="displayFullDate(thread.publishedAt)">
+            {{ formatPublishedAt(thread.publishedAt) }}
+          </p>
         </div>
       </div>
     </div>
