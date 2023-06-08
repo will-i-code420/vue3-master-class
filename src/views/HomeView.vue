@@ -1,14 +1,14 @@
 <script setup>
-import ForumList from '@/components/ForumList.vue'
+import CategoryList from '@/components/CategoryList.vue'
 import { reactive } from 'vue'
 import sourceData from '@/data.json'
-const forums = reactive(sourceData.forums)
+const categories = reactive(sourceData.categories)
 </script>
 
 <template>
   <div class="col-full">
     <h1 class="text-center">Welcome To The Forum</h1>
-    <ForumList :forums="forums" />
+    <CategoryList :categories="categories" />
   </div>
 </template>
 
