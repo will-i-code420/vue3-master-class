@@ -4,9 +4,13 @@ defineProps({
     type: Array,
     required: true
   },
-  categoryName: {
+  title: {
     type: String,
     default: 'Forum'
+  },
+  categoryId: {
+    type: String,
+    required: false
   }
 })
 </script>
@@ -15,7 +19,10 @@ defineProps({
   <div class="col-full">
     <div class="forum-list">
       <h2 class="list-title">
-        <router-link to="#">{{ categoryName }}</router-link>
+        <router-link v-if="categoryId" :to="{ name: 'category', params: { id: categoryId } }">{{
+          title
+        }}</router-link>
+        <span>{{ title }}</span>
       </h2>
 
       <div class="forum-listing" v-for="forum in forums" :key="forum.id">
