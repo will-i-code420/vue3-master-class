@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import sourceData from '@/data.json'
+import { useForumsStore } from '@/stores/forums'
+import { useThreadsStore } from '@/stores/threads'
 import ThreadList from '@/components/ThreadList.vue'
 const props = defineProps({
   id: {
@@ -8,12 +9,8 @@ const props = defineProps({
     required: true
   }
 })
-const forum = computed(() => {
-  return sourceData.forums.find((forum) => forum.id === props.id)
-})
-const threads = computed(() => {
-  return sourceData.threads.filter((thread) => thread.forumId === props.id)
-})
+const forum = computed(() => useForumsStore().getForum(props.id))
+const threads = computed(() => useThreadsStore().getThreads(props.id))
 </script>
 
 <template>
