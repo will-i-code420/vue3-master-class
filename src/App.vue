@@ -11,11 +11,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-nav a.router-link-exact-active {
-  color: var(--color-text);
+header > a.logo {
+  width: 50px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+@media (min-width: 240px) and (max-width: 720px) {
+  header > a.logo {
+    width: 35px;
+  }
 }
 </style>
