@@ -1,33 +1,27 @@
 <script setup>
-import { reactive, computed } from 'vue'
-import sourceData from '@/data.json'
-import PostList from '../components/PostList.vue'
-import AddPostForm from '../components/AddPostForm.vue'
+import { computed } from 'vue'
+import { useThreadsStore } from '@/stores/threads'
+import { usePostsStore } from '@/stores/posts'
+import PostList from '@/components/PostList.vue'
+import AddPostForm from '@/components/AddPostForm.vue'
 const props = defineProps({
   id: {
     type: String,
     required: true
   }
 })
-const threads = reactive(sourceData.threads)
-const posts = reactive(sourceData.posts)
-
-const thread = computed(() => {
-  return threads.find((thread) => thread.id === props.id)
-})
-const threadPosts = computed(() => {
-  return posts.filter((post) => post.threadId === props.id)
-})
+const threadsStore = useThreadsStore()
+const postsStore = usePostsStore()
+const thread = computed(() => threadsStore.getThread(props.id))
+const threadPosts = computed(() => postsStore.getPosts(props.id))
 function addPost(evData) {
-  const threadIdx = threads.findIndex((thread) => thread.id === props.id)
   const newPost = {
     ...evData,
     publishedAt: Date.now() / 1000,
     threadId: props.id,
     userId: 'rpbB8C6ifrYmNDufMERWfQUoa202'
   }
-  posts.push(newPost)
-  threads[threadIdx].posts.push(evData.id)
+  postsStore.createPost(newPost)
 }
 </script>
 
