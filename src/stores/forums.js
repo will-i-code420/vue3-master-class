@@ -5,5 +5,6 @@ import sourceData from '@/data.json'
 export const useForumsStore = defineStore('forums', () => {
   const forums = ref(sourceData.forums)
   const getForum = computed(() => (id) => forums.value.find((forum) => forum.id === id))
-  return { forums, getForum }
+  const getForums = computed(() => (id) => forums.value.filter((forum) => forum.categoryId === id))
+  return { forums, getForum, getForums }
 })

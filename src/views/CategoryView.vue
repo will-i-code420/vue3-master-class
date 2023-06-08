@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import sourceData from '@/data.json'
+import { useCategoriesStore } from '@/stores/categories'
+import { useForumsStore } from '@/stores/forums'
 import ForumList from '@/components/ForumList.vue'
 const props = defineProps({
   id: {
@@ -8,16 +9,12 @@ const props = defineProps({
     required: true
   }
 })
-const category = computed(() => {
-  return sourceData.categories.find((category) => category.id === props.id)
-})
-function getCategoryForums(id) {
-  return sourceData.forums.filter((forum) => forum.categoryId === id)
-}
+const category = computed(() => useCategoriesStore().getCategory(props.id))
+const forums = computed(() => useForumsStore().getForums(props.id))
 </script>
 
 <template>
-  <ForumList :title="category.name" :forums="getCategoryForums(category.id)" />
+  <ForumList :title="category.name" :forums="forums" />
 </template>
 
 <style scoped></style>
