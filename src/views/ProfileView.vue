@@ -1,27 +1,26 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import PostList from '@/components/Postlist.vue'
 import UserProfileCard from '@/components/UserProfileCard.vue'
+import UserProfileEditCard from '@/components/UserProfileEditCard.vue'
 import { useUsersStore } from '@/stores/users'
-
+const editingProfile = ref(false)
 const user = computed(() => useUsersStore().getUser)
 </script>
 
 <template>
   <div class="flex-grid">
     <div class="col-3 mt-2">
-      <UserProfileCard :user="user" />
-      <!-- 
-    TODO: Implement Member Since and Edit Profile
+      <UserProfileCard v-if="!editingProfile" :user="user" />
+      <UserProfileEditCard v-else :user="user" @cancel-edit="editingProfile = false" />
       <p class="text-xsmall text-faded text-center">
         Member since june 2003, last visited 4 hours ago
       </p>
 
       <div class="text-center">
         <hr />
-        <a href="edit-profile.html" class="btn-green btn-small">Edit Profile</a>
+        <button @click="editingProfile = true" class="btn-green btn-small">Edit Profile</button>
       </div>
-      -->
     </div>
 
     <div class="col-7 mt-2">
