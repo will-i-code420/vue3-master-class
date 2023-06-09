@@ -31,7 +31,7 @@ const user = computed(() => useUsersStore().getUser)
       </div>
 
       <hr />
-      <PostList :posts="userPosts" />
+      <PostList :posts="useUsersStore().userPosts" />
       <!-- 
     TODO: Implement Activity Feed
       <div class="activity-list">
