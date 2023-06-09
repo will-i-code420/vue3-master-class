@@ -1,23 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import TheNavbar from '@/components/TheNavbar.vue'
 </script>
 
 <template>
-  <div>
-    <main class="container">
-      <RouterView />
-    </main>
-  </div>
+  <TheNavbar />
+  <main class="container">
+    <RouterView />
+  </main>
 </template>
 
-<style scoped>
-header > a.logo {
-  width: 50px;
-}
-
-@media (min-width: 240px) and (max-width: 720px) {
-  header > a.logo {
-    width: 35px;
-  }
-}
-</style>
+<style scoped></style>

@@ -1,12 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useUsersStore } from '@/stores/users'
+const user = computed(() => useUsersStore().getUser())
 </script>
 
 <template>
-  <div>
-    <a href="index.html" class="logo">
-      <img src="assets/img/svg/vueschool-logo.svg" />
-    </a>
+  <header id="header" class="header">
+    <router-link :to="{ name: 'home' }" class="logo">
+      <img src="@/assets/svg/vueschool-logo.svg" />
+    </router-link>
 
     <div class="btn-hamburger">
       <!-- use .btn-humburger-active to open the menu -->
@@ -19,17 +21,13 @@ import { ref } from 'vue'
     <nav class="navbar">
       <ul>
         <li class="navbar-user">
-          <a href="#">
-            <img
-              class="avatar-small"
-              src="https://pbs.twimg.com/profile_images/1188775562657091594/5mgkg44t_400x400.jpg"
-              alt=""
-            />
+          <router-link to="#">
+            <img class="avatar-small" :src="user.avatar" :alt="`${user.name} profile pic`" />
             <span>
-              Alex Kyriakidis
-              <img class="icon-profile" src="assets/img/svg/arrow-profile.svg" alt="" />
+              {{ user.name }}
+              <img class="icon-profile" src="@/assets/svg/arrow-profile.svg" alt="" />
             </span>
-          </a>
+          </router-link>
 
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
@@ -42,7 +40,7 @@ import { ref } from 'vue'
           </div>
         </li>
       </ul>
-
+      <!-- 
       <ul>
         <li class="navbar-item">
           <a href="index.html">Home</a>
@@ -56,7 +54,7 @@ import { ref } from 'vue'
         <li class="navbar-item">
           <a href="thread.html">Thread</a>
         </li>
-        <!-- Show these option only on mobile-->
+         Show these option only on mobile
         <li class="navbar-item mobile-only">
           <a href="profile.html">My Profile</a>
         </li>
@@ -64,11 +62,38 @@ import { ref } from 'vue'
           <a href="#">Logout</a>
         </li>
       </ul>
+      -->
     </nav>
-  </div>
+  </header>
 </template>
 
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #263959;
+  height: 80px;
+  padding: 0 20px;
+}
+
+@media (min-width: 240px) and (max-width: 720px) {
+  .header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    height: 60px;
+  }
+}
+header > a.logo {
+  width: 50px;
+}
+
+@media (min-width: 240px) and (max-width: 720px) {
+  header > a.logo {
+    width: 35px;
+  }
+}
 .btn-hamburger {
   cursor: pointer;
   height: 30px;
@@ -314,5 +339,27 @@ ul .navbar-mobile-item:last-child {
 
 #user-dropdown ul {
   display: block;
+}
+.logo {
+  float: left;
+}
+
+.svg-logo {
+  height: 62px;
+  width: 56px;
+}
+
+@media (min-width: 240px) and (max-width: 720px) {
+  .svg-logo {
+    height: 45px;
+    width: 40px;
+  }
+}
+
+@media (min-width: 240px) and (max-width: 400px) {
+  .svg-logo {
+    height: 40px;
+    width: 35px;
+  }
 }
 </style>
