@@ -3,21 +3,14 @@ import { computed } from 'vue'
 import PostList from '@/components/Postlist.vue'
 import UserProfileCard from '@/components/UserProfileCard.vue'
 import { useUsersStore } from '@/stores/users'
-import { usePostsStore } from '@/stores/posts'
-import { useThreadsStore } from '@/stores/threads'
+
 const user = computed(() => useUsersStore().getUser)
-const userPosts = computed(() => usePostsStore().getPosts('user', user.value.id))
-const userThreads = computed(() => useThreadsStore().getThreads('user', user.value.id))
 </script>
 
 <template>
   <div class="flex-grid">
     <div class="col-3 mt-2">
-      <UserProfileCard
-        :user="user"
-        :userPostCount="userPosts.length"
-        :userThreadCount="userThreads.length"
-      />
+      <UserProfileCard :user="user" />
       <!-- 
     TODO: Implement Member Since and Edit Profile
       <p class="text-xsmall text-faded text-center">

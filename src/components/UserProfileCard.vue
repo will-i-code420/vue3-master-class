@@ -1,15 +1,8 @@
 <script setup>
+import { useUsersStore } from '@/stores/users'
 defineProps({
   user: {
     type: Object,
-    required: true
-  },
-  userPostCount: {
-    type: Number,
-    required: true
-  },
-  userThreadCount: {
-    type: Number,
     required: true
   }
 })
@@ -30,8 +23,8 @@ defineProps({
     <span class="online">{{ user.username }} is online</span>
 
     <div class="stats">
-      <span>{{ userPostCount }} posts</span>
-      <span>{{ userThreadCount }} threads</span>
+      <span>{{ useUsersStore().userPosts.length }} posts</span>
+      <span>{{ useUsersStore().userThreads.length }} threads</span>
     </div>
 
     <hr />
