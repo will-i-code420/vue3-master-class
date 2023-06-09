@@ -1,5 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
+import PostList from '@/components/Postlist.vue'
+import { useUsersStore } from '@/stores/users'
+import { usePostsStore } from '@/stores/posts'
 </script>
 
 <template>
@@ -7,27 +10,31 @@ import { ref } from 'vue'
     <div class="col-3 mt-2">
       <div class="profile-card">
         <p class="text-center">
-          <img src="https://i.imgur.com/OqlZN48.jpg" alt="" class="avatar-xlarge" />
+          <img :src="user.avatar" :alt="`${user.name} profile pic`" class="avatar-xlarge" />
         </p>
 
-        <h1 class="title">joker</h1>
+        <h1 class="title">{{ user.username }}</h1>
 
-        <p class="text-lead">Joseph Kerr</p>
+        <p class="text-lead">{{ user.name }}</p>
 
-        <p class="text-justify">No bio specified.</p>
+        <p class="text-justify">{{ user.bio || 'No bio specified' }}</p>
 
-        <span class="online">joker is online</span>
+        <span class="online">{{ user.username }} is online</span>
 
         <div class="stats">
-          <span>116 posts</span>
-          <span>73 threads</span>
+          <span>{{ userPostCount }} posts</span>
+          <span>{{ userThreadCount }} threads</span>
         </div>
 
         <hr />
 
-        <p class="text-large text-center"><i class="fa fa-globe"></i> <a href="#">batman.com</a></p>
+        <p v-if="user.website" class="text-large text-center">
+          <i class="fa fa-globe"></i>
+          <router-link :to="user.website"> Visit {{ user.username }}</router-link>
+        </p>
       </div>
-
+      <!-- 
+    TODO: Implement Member Since and Edit Profile
       <p class="text-xsmall text-faded text-center">
         Member since june 2003, last visited 4 hours ago
       </p>
@@ -36,16 +43,19 @@ import { ref } from 'vue'
         <hr />
         <a href="edit-profile.html" class="btn-green btn-small">Edit Profile</a>
       </div>
+      -->
     </div>
 
     <div class="col-7 mt-2">
       <div class="profile-header">
-        <span class="text-lead"> Joker's recent activity </span>
-        <a href="#">See only started threads?</a>
+        <span class="text-lead"> {{ user.username }} recent activity </span>
+        <router-link to="#">See only started threads?</router-link>
       </div>
 
       <hr />
-
+      <PostList :post="userPosts" />
+      <!-- 
+    TODO: Implement Activity Feed
       <div class="activity-list">
         <div class="activity">
           <div class="activity-header">
@@ -70,67 +80,8 @@ import { ref } from 'vue'
             <span>1 comments</span>
           </div>
         </div>
-
-        <div class="activity">
-          <div class="activity-header">
-            <img src="http://i.imgur.com/s0AzOkO.png" alt="" class="hide-mobile avatar-small" />
-
-            <p class="title">
-              Wasabi vs horseraddish?
-              <span>Joker replied to Robin's topic in Cooking</span>
-            </p>
-          </div>
-
-          <div class="post-content">
-            <div>
-              <blockquote class="small">
-                <div class="author">
-                  <a href="/user/robin" class=""> robin</a>
-                  <span class="time">a month ago</span>
-                  <i class="fa fa-caret-down"></i>
-                </div>
-
-                <div class="quote">
-                  <p>
-                    Is horseradish and Wasabi the same thing? I&amp;#39;ve heard so many different
-                    things.
-                  </p>
-                </div>
-              </blockquote>
-
-              <p>They're not the same!</p>
-            </div>
-          </div>
-
-          <div class="thread-details">
-            <span>2 days ago</span>
-            <span>1 comment</span>
-          </div>
-        </div>
-
-        <div class="activity">
-          <div class="activity-header">
-            <img src="https://i.imgur.com/OqlZN48.jpg" alt="" class="hide-mobile avatar-small" />
-            <p class="title">
-              Where is the sign in button??????!?!?!?!
-              <span>Joker replied to his own topic in Questions & Feedback</span>
-            </p>
-          </div>
-
-          <div class="post-content">
-            <div>
-              <p>
-                <strong><i>Post deleted due to inappropriate language</i></strong>
-              </p>
-            </div>
-          </div>
-
-          <div class="thread-details">
-            <span>7 days ago</span>
-            <span>7 comments</span>
-          </div>
-        </div>
       </div>
+      -->
     </div>
   </div>
 </template>

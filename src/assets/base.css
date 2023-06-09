@@ -392,6 +392,24 @@ ul {
   padding: 0;
 }
 
+span.offline::before {
+  font-family: FontAwesome;
+  content: '\f1db';
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+span.online {
+  color: #57ad8d;
+}
+
+span.online::before {
+  font-family: FontAwesome;
+  content: '\f2be';
+  font-size: 14px;
+  margin-right: 5px;
+}
+
 /* Typography */
 
 h1 {
