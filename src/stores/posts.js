@@ -11,7 +11,9 @@ export const usePostsStore = defineStore('posts', () => {
     const thread = useThreadsStore().getThread(post.threadId)
     thread.push(post.id)
   }
-  const getPosts = computed(() => (id) => posts.value.filter((post) => post.threadId === id))
+  const getPosts = computed(
+    () => (type, id) => posts.value.filter((post) => post[`${type}Id`] === id)
+  )
   function guidGenerator() {
     const S4 = function () {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)

@@ -13,7 +13,7 @@ const props = defineProps({
 const threadsStore = useThreadsStore()
 const postsStore = usePostsStore()
 const thread = computed(() => threadsStore.getThread(props.id))
-const threadPosts = computed(() => postsStore.getPosts(props.id))
+const threadPosts = computed(() => postsStore.getPosts('thread', props.id))
 function addPost(evData) {
   const newPost = {
     ...evData,

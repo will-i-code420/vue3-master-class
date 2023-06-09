@@ -3,6 +3,10 @@ import { computed } from 'vue'
 import PostList from '@/components/Postlist.vue'
 import { useUsersStore } from '@/stores/users'
 import { usePostsStore } from '@/stores/posts'
+import { useThreadsStore } from '@/stores/threads'
+const user = computed(() => useUsersStore().getUser)
+const userPosts = computed(() => usePostsStore().getPosts('user', user.value.id))
+const userThreads = computed(() => useThreadsStore().getThreads('user', user.value.id))
 </script>
 
 <template>
@@ -22,8 +26,8 @@ import { usePostsStore } from '@/stores/posts'
         <span class="online">{{ user.username }} is online</span>
 
         <div class="stats">
-          <span>{{ userPostCount }} posts</span>
-          <span>{{ userThreadCount }} threads</span>
+          <span>{{ userPosts.length }} posts</span>
+          <span>{{ userThreads.length }} threads</span>
         </div>
 
         <hr />
@@ -53,7 +57,7 @@ import { usePostsStore } from '@/stores/posts'
       </div>
 
       <hr />
-      <PostList :post="userPosts" />
+      <PostList :posts="userPosts" />
       <!-- 
     TODO: Implement Activity Feed
       <div class="activity-list">

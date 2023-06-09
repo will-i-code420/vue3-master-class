@@ -5,6 +5,8 @@ import sourceData from '@/data.json'
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref(sourceData.threads)
   const getThread = computed(() => (id) => threads.value.find((thread) => thread.id === id))
-  const getThreads = computed(() => (id) => threads.value.filter((thread) => thread.forumId === id))
+  const getThreads = computed(
+    () => (type, id) => threads.value.filter((thread) => thread[`${type}Id`] === id)
+  )
   return { threads, getThread, getThreads }
 })

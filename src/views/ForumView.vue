@@ -10,7 +10,7 @@ const props = defineProps({
   }
 })
 const forum = computed(() => useForumsStore().getForum(props.id))
-const threads = computed(() => useThreadsStore().getThreads(props.id))
+const threads = computed(() => useThreadsStore().getThreads('forum', props.id))
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useUsersStore } from '@/stores/users'
-const user = computed(() => useUsersStore().getUser())
+const user = computed(() => useUsersStore().getUser)
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const user = computed(() => useUsersStore().getUser())
     <nav class="navbar">
       <ul>
         <li class="navbar-user">
-          <router-link to="#">
+          <router-link :to="{ name: 'profile' }">
             <img class="avatar-small" :src="user.avatar" :alt="`${user.name} profile pic`" />
             <span>
               {{ user.name }}
