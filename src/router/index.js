@@ -54,7 +54,8 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('@/views/ProfileView.vue')
+      component: () => import('@/views/ProfileView.vue'),
+      meta: { toTop: true, smoothScroll: true }
     },
     {
       path: '/profile/edit',
@@ -78,7 +79,13 @@ const router = createRouter({
       name: 'NotFound',
       component: () => import('@/components/PageNotFound.vue')
     }
-  ]
+  ],
+  scrollBehavior(to) {
+    const scroll = {}
+    if (to.meta.toTop) scroll.top = 0
+    if (to.meta.smoothScroll) scroll.behavior = 'smooth'
+    return { scroll }
+  }
 })
 
 export default router
