@@ -2,22 +2,25 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useThreadsStore } from '@/stores/threads'
-import { useForumsStore } from '@/stores/forums'
+import { usePostsStore } from '@/stores/posts'
 import ThreadEditor from '../components/ThreadEditor.vue'
 const router = useRouter()
 const props = defineProps({
-  forumId: {
+  threadId: {
     type: String,
     required: true
   }
 })
-const forum = computed(() => useForumsStore().getForum(props.forumId))
+const thread = computed(() => useThreadsStore().getThread(props.threadId))
+const threadText = computed(
+  () => usePostsStore().posts.find((post) => post.id === thread.value.posts[0]).text
+)
 async function saveThread(evData) {
-  const newThread = {
+  const threadEdits = {
     ...evData,
-    forumId: props.forumId
+    threadId: props.threadId
   }
-  const newId = await useThreadsStore().createThread(newThread)
+  const newId = await useThreadsStore().updateThread(threadEdits)
   const thread = useThreadsStore().getThread(newId)
   router.push({ name: 'thread', params: { id: thread.id } })
 }
@@ -29,9 +32,14 @@ function cancelThread() {
 <template>
   <div class="col-full mt-1">
     <h1>
-      Create new thread in <i>{{ forum.name }}</i>
+      Editing <i>{{ thread.title }}</i>
     </h1>
-    <ThreadEditor @submit-thread="saveThread" @cancel-thread="cancelThread" />
+    <ThreadEditor
+      :title="thread.title"
+      :text="threadText"
+      @submit-thread="saveThread"
+      @cancel-thread="cancelThread"
+    />
   </div>
 </template>
 

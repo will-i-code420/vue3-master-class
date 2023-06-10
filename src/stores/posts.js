@@ -10,9 +10,18 @@ export const usePostsStore = defineStore('posts', () => {
     post.id = guidGenerator()
     post.publishedAt = Date.now() / 1000
     post.userId = useUsersStore().authId
-    posts.value.push(post)
+    addPost(post)
     useThreadsStore().addPostId(post.threadId, post.id)
   }
+  function addPost(post) {
+    const idx = posts.value.findIndex((p) => p.id === post.id)
+    if (post.id && idx !== -1) {
+      posts.value[idx] = post
+    } else {
+      posts.value.push(post)
+    }
+  }
+  const getPost = computed(() => (id) => posts.value.filter((post) => post.id === id))
   const getPosts = computed(
     () => (type, id) => posts.value.filter((post) => post[`${type}Id`] === id)
   )
@@ -22,5 +31,5 @@ export const usePostsStore = defineStore('posts', () => {
     }
     return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
   }
-  return { posts, createPost, getPosts }
+  return { posts, createPost, addPost, getPost, getPosts }
 })

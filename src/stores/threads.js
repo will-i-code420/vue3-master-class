@@ -21,10 +21,27 @@ export const useThreadsStore = defineStore('threads', () => {
     newThread.publishedAt = Date.now() / 1000
     newThread.userId = useUsersStore().authId
     newThread.posts = []
-    threads.value.push(newThread)
+    addThread(newThread)
     useForumsStore().addNewThreadId(newThread)
     useUsersStore().addNewThreadId(newThread)
     usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
+    return newThread.id
+  }
+  function addThread(thread) {
+    const idx = threads.value.findIndex((t) => t.id === thread.id)
+    if (thread.id && idx !== -1) {
+      threads.value[idx] = thread
+    } else {
+      threads.value.push(thread)
+    }
+  }
+  async function updateThread(threadEdit) {
+    const thread = threads.value.find((thread) => thread.id === threadEdit.threadId)
+    const post = usePostsStore().getPost(thread.posts[0])
+    const newThread = { ...thread, title: threadEdit.title }
+    const newPost = { ...post, text: threadEdit.text }
+    addThread(newThread)
+    usePostsStore().addPost(newPost)
     return newThread.id
   }
   function guidGenerator() {
@@ -33,5 +50,5 @@ export const useThreadsStore = defineStore('threads', () => {
     }
     return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
   }
-  return { threads, getThread, getThreads, addPostId, createThread }
+  return { threads, getThread, getThreads, addPostId, createThread, updateThread }
 })
