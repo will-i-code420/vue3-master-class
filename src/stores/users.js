@@ -10,5 +10,9 @@ export const useUsersStore = defineStore('users', () => {
   const userThreads = ref(useThreadsStore().getThreads('user', authId.value))
   const userPosts = ref(usePostsStore().getPosts('user', authId.value))
   const getUser = computed(() => users.value.find((user) => user.id === authId.value))
-  return { authId, getUser, userThreads, userPosts }
+  function updateUser(userInfo) {
+    const idx = users.value.findIndex((user) => user.id === userInfo.id)
+    users.value[idx] = userInfo
+  }
+  return { authId, getUser, userThreads, userPosts, updateUser }
 })

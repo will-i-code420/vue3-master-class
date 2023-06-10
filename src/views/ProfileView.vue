@@ -6,20 +6,31 @@ import UserProfileEditCard from '@/components/UserProfileEditCard.vue'
 import { useUsersStore } from '@/stores/users'
 const editingProfile = ref(false)
 const user = computed(() => useUsersStore().getUser)
+function updateProfile(userData) {
+  useUsersStore().updateUser(userData)
+  editingProfile.value = false
+}
 </script>
 
 <template>
   <div class="flex-grid">
     <div class="col-3 mt-2">
       <UserProfileCard v-if="!editingProfile" :user="user" />
-      <UserProfileEditCard v-else :user="user" @cancel-edit="editingProfile = false" />
+      <UserProfileEditCard
+        v-else
+        :user="user"
+        @cancel-edit="editingProfile = false"
+        @save-edit="updateProfile"
+      />
       <p class="text-xsmall text-faded text-center">
         Member since june 2003, last visited 4 hours ago
       </p>
 
-      <div class="text-center">
+      <div v-if="!editingProfile" class="text-center">
         <hr />
-        <button @click="editingProfile = true" class="btn-green btn-small">Edit Profile</button>
+        <button @click="editingProfile = true" class="btn-green btn-small mt-1">
+          Edit Profile
+        </button>
       </div>
     </div>
 
@@ -67,7 +78,7 @@ const user = computed(() => useUsersStore().getUser)
 .profile-card {
   padding: 10px 20px 20px 20px;
   margin-bottom: 10px;
-  background: white;
+  background: var(--color-background);
   box-shadow: 2px 2px 1px rgba(136, 136, 136, 0.09);
   align-self: self-end;
 }
@@ -116,7 +127,7 @@ const user = computed(() => useUsersStore().getUser)
 }
 
 .activity-list .activity {
-  background-color: white;
+  background-color: var(--color-background);
   padding: 15px 10px;
   margin-bottom: 20px;
   box-shadow: 2px 2px 1px rgba(136, 136, 136, 0.09);
