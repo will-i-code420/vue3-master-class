@@ -1,6 +1,8 @@
 <script setup>
 import { useUsersStore } from '@/stores/users'
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
   user: {
     type: Object,
@@ -9,11 +11,18 @@ const props = defineProps({
 })
 defineEmits(['cancelEdit', 'saveEdit'])
 const activeUser = reactive({ ...props.user })
+function cancelEdit() {
+  router.push({ name: 'profile' })
+}
+function updateProfile() {
+  useUsersStore().updateUser({ ...activeUser })
+  router.push({ name: 'profile' })
+}
 </script>
 
 <template>
   <div class="profile-card">
-    <form @submit.prevent="$emit('saveEdit', { ...activeUser })">
+    <form @submit.prevent="updateProfile">
       <p class="text-center">
         <img
           :src="user.avatar"
@@ -83,7 +92,7 @@ const activeUser = reactive({ ...props.user })
       </div>
 
       <div class="btn-group space-between">
-        <button @click="$emit('cancelEdit')" class="btn-ghost">Cancel</button>
+        <button @click.prevent="cancelEdit" class="btn-ghost">Cancel</button>
         <button type="submit" class="btn-blue">Save</button>
       </div>
     </form>

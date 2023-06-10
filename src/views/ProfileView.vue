@@ -1,36 +1,32 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import PostList from '@/components/Postlist.vue'
 import UserProfileCard from '@/components/UserProfileCard.vue'
 import UserProfileEditCard from '@/components/UserProfileEditCard.vue'
 import { useUsersStore } from '@/stores/users'
-const editingProfile = ref(false)
+defineProps({
+  edit: {
+    type: Boolean,
+    default: false
+  }
+})
 const user = computed(() => useUsersStore().getUser)
-function updateProfile(userData) {
-  useUsersStore().updateUser(userData)
-  editingProfile.value = false
-}
 </script>
 
 <template>
   <div class="flex-grid">
     <div class="col-3 mt-2">
-      <UserProfileCard v-if="!editingProfile" :user="user" />
-      <UserProfileEditCard
-        v-else
-        :user="user"
-        @cancel-edit="editingProfile = false"
-        @save-edit="updateProfile"
-      />
+      <UserProfileCard v-if="!edit" :user="user" />
+      <UserProfileEditCard v-else :user="user" />
       <p class="text-xsmall text-faded text-center">
         Member since june 2003, last visited 4 hours ago
       </p>
 
-      <div v-if="!editingProfile" class="text-center">
+      <div v-if="!edit" class="text-center">
         <hr />
-        <button @click="editingProfile = true" class="btn-green btn-small mt-1">
-          Edit Profile
-        </button>
+        <router-link :to="{ name: 'profileEdit' }" class="btn-green btn-small mt-1"
+          >Edit Profile</router-link
+        >
       </div>
     </div>
 
