@@ -33,7 +33,16 @@ function addPost(evData) {
               <li class="active"><a href="#">Cooking</a></li>
           </ul>
     -->
-    <h1 class="text-center">{{ thread.title }}</h1>
+    <h1 class="text-center">
+      {{ thread.title }}
+      <router-link
+        :to="{ name: 'editThread', params: { threadId: id } }"
+        custom
+        v-slot="{ navigate }"
+      >
+        <button @click="navigate" class="btn-green btn-small">Edit Thread</button>
+      </router-link>
+    </h1>
     <PostList :posts="threadPosts" />
     <AddPostForm @submit-post="addPost" />
   </article>

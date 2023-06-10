@@ -25,7 +25,7 @@ async function saveThread(evData) {
   router.push({ name: 'thread', params: { id: thread.id } })
 }
 function cancelThread() {
-  router.push({ name: 'forum', params: { id: props.forumId } })
+  router.push({ name: 'thread', params: { id: props.threadId } })
 }
 </script>
 
