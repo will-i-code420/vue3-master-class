@@ -6,5 +6,9 @@ export const useForumsStore = defineStore('forums', () => {
   const forums = ref(sourceData.forums)
   const getForum = computed(() => (id) => forums.value.find((forum) => forum.id === id))
   const getForums = computed(() => (id) => forums.value.filter((forum) => forum.categoryId === id))
-  return { forums, getForum, getForums }
+  function addNewThreadId(thread) {
+    const forum = forums.value.find((forum) => forum.id === thread.forumId)
+    forum.value.push(thread.threadId)
+  }
+  return { forums, getForum, getForums, addNewThreadId }
 })
