@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-const emit = defineEmits(['change', 'delete'])
+const emit = defineEmits(['submitPost'])
 const newPostText = ref('')
 function submitPostForm() {
   emit('submitPost', { text: newPostText.value })

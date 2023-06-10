@@ -17,9 +17,7 @@ const threadPosts = computed(() => postsStore.getPosts('thread', props.id))
 function addPost(evData) {
   const newPost = {
     ...evData,
-    publishedAt: Date.now() / 1000,
-    threadId: props.id,
-    userId: 'rpbB8C6ifrYmNDufMERWfQUoa202'
+    threadId: props.id
   }
   postsStore.createPost(newPost)
 }

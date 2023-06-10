@@ -8,5 +8,9 @@ export const useThreadsStore = defineStore('threads', () => {
   const getThreads = computed(
     () => (type, id) => threads.value.filter((thread) => thread[`${type}Id`] === id)
   )
-  return { threads, getThread, getThreads }
+  function addPostId(threadId, postId) {
+    const thread = threads.value.find((thread) => thread.id === threadId)
+    thread.posts.push(postId)
+  }
+  return { threads, getThread, getThreads, addPostId }
 })

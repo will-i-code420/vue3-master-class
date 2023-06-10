@@ -22,7 +22,6 @@ defineProps({
         <router-link v-if="categoryId" :to="{ name: 'category', params: { id: categoryId } }">{{
           title
         }}</router-link>
-        <span>{{ title }}</span>
       </h2>
 
       <div class="forum-listing" v-for="forum in forums" :key="forum.id">
