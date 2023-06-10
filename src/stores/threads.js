@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import sourceData from '@/data.json'
 import { useUsersStore } from './users'
-import { usePostssStore } from './posts'
+import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'
 
 export const useThreadsStore = defineStore('threads', () => {
@@ -13,6 +13,7 @@ export const useThreadsStore = defineStore('threads', () => {
   )
   function addPostId(threadId, postId) {
     const thread = threads.value.find((thread) => thread.id === threadId)
+    if (!thread.posts) thread.posts = []
     thread.posts.push(postId)
   }
   function createThread(newThread) {
@@ -23,7 +24,7 @@ export const useThreadsStore = defineStore('threads', () => {
     threads.value.push(newThread)
     useForumsStore().addNewThreadId(newThread)
     useUsersStore().addNewThreadId(newThread)
-    usePostssStore().createPost({ text: newThread.text, threadId: newThread.threadId })
+    usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
   }
   function guidGenerator() {
     const S4 = function () {

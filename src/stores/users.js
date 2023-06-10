@@ -16,6 +16,7 @@ export const useUsersStore = defineStore('users', () => {
   }
   function addNewThreadId(thread) {
     const user = users.value.find((user) => user.id === thread.userId)
+    if (!user.threads) user.threads = []
     user.threads.push(thread.threadId)
   }
   return { authId, getUser, userThreads, userPosts, updateUser, addNewThreadId }

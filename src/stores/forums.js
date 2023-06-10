@@ -8,7 +8,7 @@ export const useForumsStore = defineStore('forums', () => {
   const getForums = computed(() => (id) => forums.value.filter((forum) => forum.categoryId === id))
   function addNewThreadId(thread) {
     const forum = forums.value.find((forum) => forum.id === thread.forumId)
-    forum.value.push(thread.threadId)
+    forum.threads.push(thread.threadId)
   }
   return { forums, getForum, getForums, addNewThreadId }
 })

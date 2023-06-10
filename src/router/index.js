@@ -29,6 +29,15 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/forum/:forumId/thread/create',
+      name: 'createThread',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('@/views/CreateThreadView.vue'),
+      props: true
+    },
+    {
       path: '/thread/:id',
       name: 'thread',
       // route level code-splitting

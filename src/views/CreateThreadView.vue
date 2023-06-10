@@ -1,19 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-import { useThreadsStore } from './threads'
+import { ref, computed } from 'vue'
+import { useThreadsStore } from '@/stores/threads'
+import { useForumsStore } from '@/stores/forums'
 const props = defineProps({
-  forum: {
-    type: Object,
+  forumId: {
+    type: String,
     required: true
   }
 })
 const title = ref('')
 const text = ref('')
+const forum = computed(() => useForumsStore().getForum(props.forumId))
 function saveThread() {
   const newThread = {
     title,
     text,
-    forumId: props.id
+    forumId: props.forumId
   }
   useThreadsStore().createThread(newThread)
 }
