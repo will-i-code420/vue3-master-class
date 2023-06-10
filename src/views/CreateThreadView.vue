@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useThreadsStore } from '@/stores/threads'
 import { useForumsStore } from '@/stores/forums'
+const router = useRouter()
 const props = defineProps({
   forumId: {
     type: String,
@@ -11,13 +13,18 @@ const props = defineProps({
 const title = ref('')
 const text = ref('')
 const forum = computed(() => useForumsStore().getForum(props.forumId))
-function saveThread() {
+async function saveThread() {
   const newThread = {
     title,
     text,
     forumId: props.forumId
   }
-  useThreadsStore().createThread(newThread)
+  const newId = await useThreadsStore().createThread(newThread)
+  const thread = useThreadsStore().getThread(newId)
+  router.push({ name: 'thread', params: { id: thread.id } })
+}
+function cancelThread() {
+  router.push({ name: 'forum', params: { id: props.forumId } })
 }
 </script>
 
@@ -46,7 +53,7 @@ function saveThread() {
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-ghost">Cancel</button>
+        <button @click="cancelThread" class="btn btn-ghost">Cancel</button>
         <button class="btn btn-blue" type="submit" name="Publish">Publish</button>
       </div>
     </form>

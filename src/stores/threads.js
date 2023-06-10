@@ -16,7 +16,7 @@ export const useThreadsStore = defineStore('threads', () => {
     if (!thread.posts) thread.posts = []
     thread.posts.push(postId)
   }
-  function createThread(newThread) {
+  async function createThread(newThread) {
     newThread.id = guidGenerator()
     newThread.publishedAt = Date.now() / 1000
     newThread.userId = useUsersStore().authId
@@ -25,6 +25,7 @@ export const useThreadsStore = defineStore('threads', () => {
     useForumsStore().addNewThreadId(newThread)
     useUsersStore().addNewThreadId(newThread)
     usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
+    return newThread.id
   }
   function guidGenerator() {
     const S4 = function () {
