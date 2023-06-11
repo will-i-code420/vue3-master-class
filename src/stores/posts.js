@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import sourceData from '@/data.json'
 import { useThreadsStore } from './threads'
 import { useUsersStore } from './users'
+import { findById } from '@/helpers'
 
 export const usePostsStore = defineStore('posts', () => {
   const posts = ref(sourceData.posts)
@@ -21,7 +22,7 @@ export const usePostsStore = defineStore('posts', () => {
       posts.value.push(post)
     }
   }
-  const getPost = computed(() => (id) => posts.value.filter((post) => post.id === id))
+  const getPost = computed(() => (id) => findById(posts.value, id))
   const getPosts = computed(
     () => (type, id) => posts.value.filter((post) => post[`${type}Id`] === id)
   )

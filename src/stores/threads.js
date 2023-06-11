@@ -4,15 +4,16 @@ import sourceData from '@/data.json'
 import { useUsersStore } from './users'
 import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'
+import { findById } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref(sourceData.threads)
-  const getThread = computed(() => (id) => threads.value.find((thread) => thread.id === id))
+  const getThread = computed(() => (id) => findById(threads.value, id))
   const getThreads = computed(
     () => (type, id) => threads.value.filter((thread) => thread[`${type}Id`] === id)
   )
   function addPostId(threadId, postId) {
-    const thread = threads.value.find((thread) => thread.id === threadId)
+    const thread = findById(threads.value, threadId)
     if (!thread.posts) thread.posts = []
     thread.posts.push(postId)
   }
@@ -36,7 +37,7 @@ export const useThreadsStore = defineStore('threads', () => {
     }
   }
   async function updateThread(threadEdit) {
-    const thread = threads.value.find((thread) => thread.id === threadEdit.threadId)
+    const thread = findById(threads.value, threadEdit.threadId)
     const post = usePostsStore().getPost(thread.posts[0])
     const newThread = { ...thread, title: threadEdit.title }
     const newPost = { ...post, text: threadEdit.text }
