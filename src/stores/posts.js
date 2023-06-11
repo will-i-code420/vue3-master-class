@@ -12,7 +12,7 @@ export const usePostsStore = defineStore('posts', () => {
     post.publishedAt = Date.now() / 1000
     post.userId = useUsersStore().authId
     addPost(post)
-    useThreadsStore().addPostId(post.threadId, post.id)
+    useThreadsStore().addPostId({ parentId: post.threadId, childId: post.id })
   }
   function addPost(post) {
     upsert(posts.value, post)

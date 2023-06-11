@@ -1,4 +1,5 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import { findById } from '@/helpers'
 defineProps({
@@ -7,7 +8,7 @@ defineProps({
     required: true
   }
 })
-const users = useUsersStore().user
+const { users } = storeToRefs(useUsersStore())
 function getUser(id) {
   return findById(users.value, id)
 }

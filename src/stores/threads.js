@@ -4,7 +4,7 @@ import sourceData from '@/data.json'
 import { useUsersStore } from './users'
 import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'
-import { findById, upsert, guidGenerator } from '@/helpers'
+import { findById, upsert, guidGenerator, appendChildToParent } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref(sourceData.threads)
@@ -12,10 +12,8 @@ export const useThreadsStore = defineStore('threads', () => {
   const getThreads = computed(
     () => (type, id) => threads.value.filter((thread) => thread[`${type}Id`] === id)
   )
-  function addPostId(threadId, postId) {
-    const thread = findById(threads.value, threadId)
-    if (!thread.posts) thread.posts = []
-    thread.posts.push(postId)
+  function addPostId() {
+    appendChildToParent(threads.value, { parent: 'threads', child: 'posts' })
   }
   async function createThread(newThread) {
     newThread.id = guidGenerator()
@@ -23,19 +21,13 @@ export const useThreadsStore = defineStore('threads', () => {
     newThread.userId = useUsersStore().authId
     newThread.posts = []
     addThread(newThread)
-    useForumsStore().addNewThreadId(newThread)
+    useForumsStore().addNewThreadId({ parentId: newThread.forumId, childId: newThread.id })
     useUsersStore().addNewThreadId(newThread)
     usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
     return newThread.id
   }
   function addThread(thread) {
     upsert(threads.value, thread)
-    const idx = threads.value.findIndex((t) => t.id === thread.id)
-    if (thread.id && idx !== -1) {
-      threads.value[idx] = thread
-    } else {
-      threads.value.push(thread)
-    }
   }
   async function updateThread(threadEdit) {
     const thread = findById(threads.value, threadEdit.threadId)

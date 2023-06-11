@@ -16,4 +16,12 @@ const guidGenerator = () => {
   return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
 }
 
-export { findById, upsert, guidGenerator }
+const appendChildToParent = ({ parent, child }) => {
+  return (resources, { childId, parentId }) => {
+    const resource = findById(resources.value[parent], parentId)
+    if (!resource[child]) resource[child] = []
+    resource[child].push(childId)
+  }
+}
+
+export { findById, upsert, guidGenerator, appendChildToParent }

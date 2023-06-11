@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import sourceData from '@/data.json'
 import { useThreadsStore } from '@/stores/threads'
 import { usePostsStore } from '@/stores/posts'
-import { findById, upsert } from '@/helpers'
+import { findById, upsert, appendChildToParent } from '@/helpers'
 
 export const useUsersStore = defineStore('users', () => {
   const users = ref(sourceData.users)
@@ -14,10 +14,8 @@ export const useUsersStore = defineStore('users', () => {
   function updateUser(userInfo) {
     upsert(users.value, userInfo)
   }
-  function addNewThreadId(thread) {
-    const user = findById(users.value, thread.userId)
-    if (!user.threads) user.threads = []
-    user.threads.push(thread.threadId)
+  function addNewThreadId() {
+    appendChildToParent(users.value, { parent: 'users', child: 'threads' })
   }
-  return { authId, getUser, userThreads, userPosts, updateUser, addNewThreadId }
+  return { users, authId, getUser, userThreads, userPosts, updateUser, addNewThreadId }
 })
