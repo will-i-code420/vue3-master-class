@@ -4,7 +4,7 @@ import sourceData from '@/data.json'
 import { useUsersStore } from './users'
 import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'
-import { findById } from '@/helpers'
+import { findById, upsert, guidGenerator } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref(sourceData.threads)
@@ -29,6 +29,7 @@ export const useThreadsStore = defineStore('threads', () => {
     return newThread.id
   }
   function addThread(thread) {
+    upsert(threads.value, thread)
     const idx = threads.value.findIndex((t) => t.id === thread.id)
     if (thread.id && idx !== -1) {
       threads.value[idx] = thread
@@ -44,12 +45,6 @@ export const useThreadsStore = defineStore('threads', () => {
     addThread(newThread)
     usePostsStore().addPost(newPost)
     return newThread.id
-  }
-  function guidGenerator() {
-    const S4 = function () {
-      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    }
-    return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
   }
   return { threads, getThread, getThreads, addPostId, createThread, updateThread }
 })

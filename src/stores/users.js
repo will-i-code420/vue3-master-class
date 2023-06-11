@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import sourceData from '@/data.json'
 import { useThreadsStore } from '@/stores/threads'
 import { usePostsStore } from '@/stores/posts'
-import { findById } from '@/helpers'
+import { findById, upsert } from '@/helpers'
 
 export const useUsersStore = defineStore('users', () => {
   const users = ref(sourceData.users)
@@ -12,8 +12,7 @@ export const useUsersStore = defineStore('users', () => {
   const userPosts = ref(usePostsStore().getPosts('user', authId.value))
   const getUser = computed(() => findById(users.value, authId.value))
   function updateUser(userInfo) {
-    const idx = users.value.findIndex((user) => user.id === userInfo.id)
-    users.value[idx] = userInfo
+    upsert(users.value, userInfo)
   }
   function addNewThreadId(thread) {
     const user = findById(users.value, thread.userId)

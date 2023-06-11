@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import sourceData from '@/data.json'
 import { useThreadsStore } from './threads'
 import { useUsersStore } from './users'
-import { findById } from '@/helpers'
+import { findById, upsert, guidGenerator } from '@/helpers'
 
 export const usePostsStore = defineStore('posts', () => {
   const posts = ref(sourceData.posts)
@@ -15,22 +15,11 @@ export const usePostsStore = defineStore('posts', () => {
     useThreadsStore().addPostId(post.threadId, post.id)
   }
   function addPost(post) {
-    const idx = posts.value.findIndex((p) => p.id === post.id)
-    if (post.id && idx !== -1) {
-      posts.value[idx] = post
-    } else {
-      posts.value.push(post)
-    }
+    upsert(posts.value, post)
   }
   const getPost = computed(() => (id) => findById(posts.value, id))
   const getPosts = computed(
     () => (type, id) => posts.value.filter((post) => post[`${type}Id`] === id)
   )
-  function guidGenerator() {
-    const S4 = function () {
-      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    }
-    return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
-  }
   return { posts, createPost, addPost, getPost, getPosts }
 })
