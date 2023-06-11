@@ -1,5 +1,5 @@
 <script setup>
-import sourceData from '@/data.json'
+import { useForumsStore } from '@/stores/forums'
 import ForumList from '@/components/ForumList.vue'
 defineProps({
   categories: {
@@ -8,7 +8,7 @@ defineProps({
   }
 })
 function getCategoryForums(id) {
-  return sourceData.forums.filter((forum) => forum.categoryId === id)
+  return useForumsStore().forums.filter((forum) => forum.categoryId === id)
 }
 </script>
 

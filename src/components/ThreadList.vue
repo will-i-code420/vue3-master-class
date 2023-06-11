@@ -1,15 +1,15 @@
 <script setup>
-import { reactive } from 'vue'
-import sourceData from '@/data.json'
-const users = reactive(sourceData.users)
+import { useUsersStore } from '@/stores/users'
+import { findById } from '@/helpers'
 defineProps({
   threads: {
     type: Array,
     required: true
   }
 })
+const users = useUsersStore().user
 function getUser(id) {
-  return users.find((user) => user.id === id)
+  return findById(users.value, id)
 }
 </script>
 
