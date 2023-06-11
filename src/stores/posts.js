@@ -13,6 +13,7 @@ export const usePostsStore = defineStore('posts', () => {
     post.userId = useUsersStore().authId
     addPost(post)
     useThreadsStore().addPostId({ parentId: post.threadId, childId: post.id })
+    useThreadsStore().addContributor({ parentId: post.threadId, childId: useUsersStore().authId })
   }
   function addPost(post) {
     upsert(posts.value, post)

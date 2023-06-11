@@ -16,11 +16,13 @@ const guidGenerator = () => {
   return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
 }
 
-const appendChildToParent = ({ parent, child }) => {
-  return (resources, { childId, parentId }) => {
-    const resource = findById(resources.value[parent], parentId)
-    if (!resource[child]) resource[child] = []
-    resource[child].push(childId)
+const appendChildToParent = ({ child }) => {
+  return (resources, { parentId, childId }) => {
+    const resource = findById(resources, parentId)
+    resource[child] = resource[child] || []
+    if (!resource[child].includes(childId)) {
+      resource[child].push(childId)
+    }
   }
 }
 

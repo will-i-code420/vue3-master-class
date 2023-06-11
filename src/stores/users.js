@@ -14,8 +14,8 @@ export const useUsersStore = defineStore('users', () => {
   function updateUser(userInfo) {
     upsert(users.value, userInfo)
   }
-  function addNewThreadId() {
-    appendChildToParent(users.value, { parent: 'users', child: 'threads' })
+  function addNewThreadId({ parentId, childId }) {
+    appendChildToParent({ child: 'threads' })(users.value, { parentId, childId })
   }
   return { users, authId, getUser, userThreads, userPosts, updateUser, addNewThreadId }
 })

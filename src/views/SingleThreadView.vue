@@ -4,6 +4,7 @@ import { useThreadsStore } from '@/stores/threads'
 import { usePostsStore } from '@/stores/posts'
 import PostList from '@/components/PostList.vue'
 import AddPostForm from '@/components/AddPostForm.vue'
+import BaseDateDisplay from '../components/BaseDateDisplay.vue'
 const props = defineProps({
   id: {
     type: String,
@@ -43,6 +44,13 @@ function addPost(evData) {
         <button @click="navigate" class="btn-green btn-small">Edit Thread</button>
       </router-link>
     </h1>
+    <p>
+      By <a href="#" class="link-unstyled">{{ thread.author.name }}</a
+      >, <BaseDateDisplay :timestamp="thread.publishedAt" />
+      <span style="float: right; margin-top: 2px" class="hide-mobile text-faded text-small"
+        >{{ thread.repliesCount }} replies by {{ thread.contributorsCount }} contributors</span
+      >
+    </p>
     <PostList :posts="threadPosts" />
     <AddPostForm @submit-post="addPost" />
   </article>

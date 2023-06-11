@@ -8,12 +8,29 @@ import { findById, upsert, guidGenerator, appendChildToParent } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref(sourceData.threads)
-  const getThread = computed(() => (id) => findById(threads.value, id))
+  const getThread = computed(() => (id) => {
+    const thread = findById(threads.value, id)
+    return {
+      ...thread,
+      get author() {
+        return findById(useUsersStore().users, thread.userId)
+      },
+      get repliesCount() {
+        return thread.posts.length - 1
+      },
+      get contributorsCount() {
+        return thread.contributors.length
+      }
+    }
+  })
   const getThreads = computed(
     () => (type, id) => threads.value.filter((thread) => thread[`${type}Id`] === id)
   )
-  function addPostId() {
-    appendChildToParent(threads.value, { parent: 'threads', child: 'posts' })
+  function addPostId({ parentId, childId }) {
+    appendChildToParent({ child: 'posts' })(threads.value, { parentId, childId })
+  }
+  function addContributor({ parentId, childId }) {
+    appendChildToParent({ child: 'contributors' })(threads.value, { parentId, childId })
   }
   async function createThread(newThread) {
     newThread.id = guidGenerator()
@@ -22,7 +39,7 @@ export const useThreadsStore = defineStore('threads', () => {
     newThread.posts = []
     addThread(newThread)
     useForumsStore().addNewThreadId({ parentId: newThread.forumId, childId: newThread.id })
-    useUsersStore().addNewThreadId(newThread)
+    useUsersStore().addNewThreadId({ parentId: newThread.userId, childId: newThread.id })
     usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
     return newThread.id
   }
@@ -38,5 +55,5 @@ export const useThreadsStore = defineStore('threads', () => {
     usePostsStore().addPost(newPost)
     return newThread.id
   }
-  return { threads, getThread, getThreads, addPostId, createThread, updateThread }
+  return { threads, getThread, getThreads, addPostId, addContributor, createThread, updateThread }
 })
