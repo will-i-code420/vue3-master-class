@@ -30,7 +30,7 @@ function getUser(id) {
         </p>
       </div>
       <div class="activity">
-        <p class="replies-count">{{ thread.posts.length - 1 }} replies</p>
+        <p class="replies-count">{{ thread.repliesCount }} replies</p>
         <img :src="getUser(thread.userId).avatar" alt="user profile avatar" class="avatar-medium" />
         <div class="">
           <p>
@@ -48,7 +48,7 @@ function getUser(id) {
 <style scoped>
 .thread-list {
   padding: 0;
-  background-color: white;
+  background-color: var(--color-background);
 }
 
 .thread-list .thread {
@@ -106,7 +106,7 @@ function getUser(id) {
 }
 
 .list-title a {
-  color: white;
+  color: var(--color-text);
 }
 
 .list-title a:hover {

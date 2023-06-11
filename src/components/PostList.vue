@@ -1,16 +1,13 @@
 <script setup>
-import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
-import { findById } from '@/helpers'
 defineProps({
   posts: {
     type: Array,
     required: true
   }
 })
-const { users } = storeToRefs(useUsersStore())
 function getUser(id) {
-  return findById(users.value, id)
+  return useUsersStore().getUser(id)
 }
 </script>
 
@@ -22,12 +19,9 @@ function getUser(id) {
         <router-link to="#"
           ><img :src="getUser(post.userId).avatar" alt="posted user avatar" class="avatar-large"
         /></router-link>
-        <!-- 
-            TODO: Implement User Totals
-            <p>107 posts</p> user total post count
-            <p class="desktop-only text-small">23 threads</p> user total thread count
-             <span class="online desktop-only">online</span> user online or not
-           -->
+        <p>{{ getUser(post.userId).postsCount }} posts</p>
+        <p class="desktop-only text-small">{{ getUser(post.userId).threadsCount }} threads</p>
+        <span class="online desktop-only">online</span>
       </div>
       <div class="post-content-container">
         <p class="mb-1">
