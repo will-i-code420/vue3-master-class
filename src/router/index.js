@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import sourceData from '@/data.json'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +43,9 @@ const router = createRouter({
       // this generates a separate chunk (SingleThread.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/SingleThreadView.vue'),
-      props: true,
+      props: true
+      /*
+      TODO: Implement thread route protection once firestore connected
       beforeEnter: (to) => {
         const threadExists = sourceData.threads.find((thread) => thread.id === to.params.id)
         if (!threadExists) {
@@ -56,6 +57,7 @@ const router = createRouter({
           }
         }
       }
+      */
     },
     {
       path: '/thread/:threadId/edit',
