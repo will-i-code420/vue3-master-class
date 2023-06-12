@@ -11,7 +11,8 @@ module.exports = {
   rules: {
     'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-undef': process.env.NODE_ENV === 'production' ? 'error' : 'warn'
   },
   parserOptions: {
     ecmaVersion: 'latest'

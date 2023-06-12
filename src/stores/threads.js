@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import sourceData from '@/data.json'
 import { useUsersStore } from './users'
 import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'

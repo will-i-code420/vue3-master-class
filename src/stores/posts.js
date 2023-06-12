@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import sourceData from '@/data.json'
 import { useThreadsStore } from './threads'
 import { useUsersStore } from './users'
 import { findById, upsert, guidGenerator } from '@/helpers'

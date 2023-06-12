@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import sourceData from '@/data.json'
 import { findById } from '@/helpers'
 
 export const useCategoriesStore = defineStore('categories', () => {
