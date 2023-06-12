@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useUsersStore } from '@/stores/users'
-const user = computed(() => useUsersStore().getUser)
+const authUser = computed(() => useUsersStore().authUser)
 </script>
 
 <template>
@@ -20,11 +20,15 @@ const user = computed(() => useUsersStore().getUser)
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
       <ul>
-        <li class="navbar-user">
+        <li v-if="authUser" class="navbar-user">
           <router-link :to="{ name: 'profile' }">
-            <img class="avatar-small" :src="user.avatar" :alt="`${user.name} profile pic`" />
+            <img
+              class="avatar-small"
+              :src="authUser.avatar"
+              :alt="`${authUser.name} profile pic`"
+            />
             <span>
-              {{ user.name }}
+              {{ authUser.name }}
               <img class="icon-profile" src="@/assets/svg/arrow-profile.svg" alt="" />
             </span>
           </router-link>
@@ -34,7 +38,9 @@ const user = computed(() => useUsersStore().getUser)
           <div id="user-dropdown">
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
-              <li class="dropdown-menu-item"><a href="profile.html">View profile</a></li>
+              <li class="dropdown-menu-item">
+                <router-link :to="{ name: 'profile' }">View Profile</router-link>
+              </li>
               <li class="dropdown-menu-item"><a href="#">Log out</a></li>
             </ul>
           </div>

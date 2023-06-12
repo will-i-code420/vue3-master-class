@@ -5,8 +5,9 @@ import { usePostsStore } from '@/stores/posts'
 import { findById, upsert, appendChildToParent } from '@/helpers'
 
 export const useUsersStore = defineStore('users', () => {
-  const users = ref(sourceData.users)
+  const users = ref([])
   const authId = ref('ALXhxjwgY9PinwNGHpfai6OWyDu2')
+  const authUser = findById(users.value, authId.value)
   const getUser = computed(() => (id) => {
     const user = findById(users.value, id)
     return {
@@ -32,5 +33,5 @@ export const useUsersStore = defineStore('users', () => {
   function addNewThreadId({ parentId, childId }) {
     appendChildToParent({ child: 'threads' })(users.value, { parentId, childId })
   }
-  return { users, authId, getUser, updateUser, addNewThreadId }
+  return { users, authUser, authId, getUser, updateUser, addNewThreadId }
 })

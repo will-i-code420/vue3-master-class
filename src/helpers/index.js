@@ -1,4 +1,7 @@
-const findById = (resources, id) => resources.find((r) => r.id === id)
+const findById = (resources, id) => {
+  if (!resources) return null
+  return resources.find((r) => r.id === id)
+}
 
 const upsert = (resources, newResource) => {
   const idx = resources.findIndex((r) => r.id === newResource.id)

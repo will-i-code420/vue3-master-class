@@ -6,7 +6,7 @@ import { useForumsStore } from './forums'
 import { findById, upsert, guidGenerator, appendChildToParent } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
-  const threads = ref(sourceData.threads)
+  const threads = ref([])
   const getThread = computed(() => (id) => {
     const thread = findById(threads.value, id)
     return {

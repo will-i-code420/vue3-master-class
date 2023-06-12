@@ -5,7 +5,7 @@ import { useUsersStore } from './users'
 import { findById, upsert, guidGenerator } from '@/helpers'
 
 export const usePostsStore = defineStore('posts', () => {
-  const posts = ref(sourceData.posts)
+  const posts = ref([])
   function createPost(post) {
     post.id = guidGenerator()
     post.publishedAt = Date.now() / 1000
