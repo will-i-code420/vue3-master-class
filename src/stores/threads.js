@@ -51,6 +51,11 @@ export const useThreadsStore = defineStore('threads', () => {
       id
     })
     addThread(thread)
+    useUsersStore().fetchUser(thread.userId)
+    thread.posts.forEach(async (postId) => {
+      const post = await usePostsStore().fetchPost(postId)
+      if (post) usePostsStore().addPost(post)
+    })
     return thread
   }
   async function updateThread(threadEdit) {

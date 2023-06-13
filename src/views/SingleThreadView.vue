@@ -1,9 +1,7 @@
 <script setup>
-import { onMounted, computed } from 'vue'
-import { getFirestoreDoc } from '@/helpers'
+import { computed } from 'vue'
 import { useThreadsStore } from '@/stores/threads'
 import { usePostsStore } from '@/stores/posts'
-import { useUsersStore } from '@/stores/users'
 import PostList from '@/components/PostList.vue'
 import AddPostForm from '@/components/AddPostForm.vue'
 import BaseDateDisplay from '../components/BaseDateDisplay.vue'
@@ -13,20 +11,14 @@ const props = defineProps({
     required: true
   }
 })
-onMounted(async () => {
-  console.log(`the component is now mounted.`)
-  const thread = await fetchThread(props.id)
-  console.log('got thread', thread)
-})
 const threadsStore = useThreadsStore()
-const { fetchThread, getThread } = threadsStore
 const postsStore = usePostsStore()
-const usersStore = useUsersStore()
-const { updateUser } = usersStore
-const thread = computed(() => getThread(props.id))
+
+// thread.value.posts.map((postId) => usePostsStore().getPost(postId))
+
+const thread = computed(() => threadsStore.getThread(props.id))
 const threadPosts = computed(() => {
-  //postsStore.getPosts('thread', props.id)
-  return []
+  return thread.value.posts.map((postId) => postsStore.getPost(postId))
 })
 function addPost(evData) {
   const newPost = {
@@ -35,19 +27,21 @@ function addPost(evData) {
   }
   postsStore.createPost(newPost)
 }
+// TODO: look into Unhandled error during execution of scheduler flush. This is likely a Vue internals bug. Please open an issue at https://new-issue.vuejs.org/?repo=vuejs/core, seems the componenet is loading data but erroring
 </script>
 
 <template>
-  <!-- 
-  <article v-if="thread" class="col-large mt-1">
-    
-      TODO: Implement Breadcrumbs
-      <ul class="breadcrumbs">
-              <li><a href="#"><i class="fa fa-home fa-btn"></i>Home</a></li>
-              <li><a href="category.html">Discussions</a></li>
-              <li class="active"><a href="#">Cooking</a></li>
-          </ul>
-    
+  <article class="col-large mt-1">
+    <!-- 
+    TODO: Implement Breadcrumbs
+    <ul class="breadcrumbs">
+      <li>
+        <a href="#"><i class="fa fa-home fa-btn"></i>Home</a>
+      </li>
+      <li><a href="category.html">Discussions</a></li>
+      <li class="active"><a href="#">Cooking</a></li>
+    </ul>
+-->
     <h1 class="text-center">
       {{ thread.title }}
       <router-link
@@ -59,7 +53,7 @@ function addPost(evData) {
       </router-link>
     </h1>
     <p>
-      By <a href="#" class="link-unstyled">{{ thread.author.name }}</a
+      By <a href="#" class="link-unstyled">{{ thread.author?.name }}</a
       >, <BaseDateDisplay :timestamp="thread.publishedAt" />
       <span style="float: right; margin-top: 2px" class="hide-mobile text-faded text-small"
         >{{ thread.repliesCount }} replies by {{ thread.contributorsCount }} contributors</span
@@ -68,10 +62,6 @@ function addPost(evData) {
     <PostList :posts="threadPosts" />
     <AddPostForm @submit-post="addPost" />
   </article>
-  -->
-  <div>
-    <h1>single thread view from {{ id }}</h1>
-  </div>
 </template>
 
 <style scoped></style>
