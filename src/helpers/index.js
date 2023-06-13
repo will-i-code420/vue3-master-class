@@ -1,3 +1,6 @@
+import { db } from '@/config/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+
 const findById = (resources, id) => {
   if (!resources) return null
   return resources.find((r) => r.id === id)
@@ -29,4 +32,17 @@ const appendChildToParent = ({ child }) => {
   }
 }
 
-export { findById, upsert, guidGenerator, appendChildToParent }
+const getFirestoreDoc = async ({ collection, id }) => {
+  const docRef = doc(db, collection, id)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    const resource = { ...docSnap.data(), id: docSnap.id }
+    return resource
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log('No such document!')
+  }
+}
+
+export { findById, upsert, guidGenerator, appendChildToParent, getFirestoreDoc }

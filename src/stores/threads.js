@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { useUsersStore } from './users'
 import { usePostsStore } from './posts'
 import { useForumsStore } from './forums'
-import { findById, upsert, guidGenerator, appendChildToParent } from '@/helpers'
+import { findById, upsert, guidGenerator, appendChildToParent, getFirestoreDoc } from '@/helpers'
 
 export const useThreadsStore = defineStore('threads', () => {
   const threads = ref([])
@@ -45,6 +45,14 @@ export const useThreadsStore = defineStore('threads', () => {
   function addThread(thread) {
     upsert(threads.value, thread)
   }
+  async function fetchThread(id) {
+    const thread = await getFirestoreDoc({
+      collection: 'threads',
+      id
+    })
+    addThread(thread)
+    return thread
+  }
   async function updateThread(threadEdit) {
     const thread = findById(threads.value, threadEdit.threadId)
     const post = usePostsStore().getPost(thread.posts[0])
@@ -54,5 +62,15 @@ export const useThreadsStore = defineStore('threads', () => {
     usePostsStore().addPost(newPost)
     return newThread.id
   }
-  return { threads, getThread, getThreads, addPostId, addContributor, createThread, updateThread }
+  return {
+    threads,
+    getThread,
+    addThread,
+    fetchThread,
+    getThreads,
+    addPostId,
+    addContributor,
+    createThread,
+    updateThread
+  }
 })
