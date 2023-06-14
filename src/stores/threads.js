@@ -42,8 +42,17 @@ export const useThreadsStore = defineStore('threads', () => {
     usePostsStore().createPost({ text: newThread.text, threadId: newThread.id })
     return newThread.id
   }
+  // TODO: refactore all addThread like actions using upsert to helper function
   function addThread(thread) {
     upsert(threads.value, thread)
+  }
+  async function initSingleThread(id) {
+    const thread = await fetchThread(id)
+    useUsersStore().fetchUser(thread.userId)
+    thread.posts.forEach(async (postId) => {
+      const post = await usePostsStore().fetchPost(postId)
+      if (post) usePostsStore().addPost(post)
+    })
   }
   async function fetchThread(id) {
     const thread = await getFirestoreDoc({
@@ -51,11 +60,6 @@ export const useThreadsStore = defineStore('threads', () => {
       id
     })
     addThread(thread)
-    useUsersStore().fetchUser(thread.userId)
-    thread.posts.forEach(async (postId) => {
-      const post = await usePostsStore().fetchPost(postId)
-      if (post) usePostsStore().addPost(post)
-    })
     return thread
   }
   async function updateThread(threadEdit) {
@@ -76,6 +80,7 @@ export const useThreadsStore = defineStore('threads', () => {
     addPostId,
     addContributor,
     createThread,
-    updateThread
+    updateThread,
+    initSingleThread
   }
 })

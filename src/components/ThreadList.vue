@@ -1,17 +1,10 @@
 <script setup>
-import { storeToRefs } from 'pinia'
-import { useUsersStore } from '@/stores/users'
-import { findById } from '@/helpers'
 defineProps({
   threads: {
     type: Array,
     required: true
   }
 })
-const { users } = storeToRefs(useUsersStore())
-function getUser(id) {
-  return findById(users.value, id)
-}
 </script>
 
 <template>
@@ -25,16 +18,18 @@ function getUser(id) {
           }}</router-link>
         </p>
         <p class="text-faded">
-          By <router-link to="#">{{ getUser(thread.userId).name }}</router-link
+          By <router-link to="#">{{ thread.author?.name }}</router-link
           >, <BaseDateDisplay :timestamp="thread.publishedAt" />
         </p>
       </div>
       <div class="activity">
         <p class="replies-count">{{ thread.repliesCount }} replies</p>
-        <img :src="getUser(thread.userId).avatar" alt="user profile avatar" class="avatar-medium" />
+
+        <img :src="thread.author?.avatar" alt="user profile avatar" class="avatar-medium" />
+
         <div class="">
           <p>
-            <router-link to="#">{{ getUser(thread.userId).name }}</router-link>
+            <router-link to="#">{{ thread.author?.name }}</router-link>
           </p>
           <p class="text-faded">
             <BaseDateDisplay :timestamp="thread.publishedAt" />

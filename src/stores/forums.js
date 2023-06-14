@@ -1,6 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { findById, appendChildToParent } from '@/helpers'
+import { useThreadsStore } from './threads'
+import { useUsersStore } from './users'
+import { findById, upsert, appendChildToParent, getFirestoreDoc } from '@/helpers'
 
 export const useForumsStore = defineStore('forums', () => {
   const forums = ref([])
@@ -9,5 +11,23 @@ export const useForumsStore = defineStore('forums', () => {
   function addNewThreadId({ parentId, childId }) {
     appendChildToParent({ child: 'threads' })(forums.value, { parentId, childId })
   }
-  return { forums, getForum, getForums, addNewThreadId }
+  async function initForum(id) {
+    const forum = await fetchForum(id)
+    forum.threads.forEach(async (threadId) => {
+      const thread = await useThreadsStore().fetchThread(threadId)
+      await useUsersStore().fetchUser(thread.userId)
+    })
+  }
+  async function fetchForum(id) {
+    const forum = await getFirestoreDoc({
+      collection: 'forums',
+      id
+    })
+    addForum(forum)
+    return forum
+  }
+  function addForum(forum) {
+    upsert(forums.value, forum)
+  }
+  return { forums, fetchForum, getForum, getForums, addNewThreadId, initForum }
 })

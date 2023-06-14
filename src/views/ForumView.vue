@@ -9,9 +9,11 @@ const props = defineProps({
     required: true
   }
 })
-const forum = computed(() => useForumsStore().getForum(props.id))
+const forumsStore = useForumsStore()
+const threadsStore = useThreadsStore()
+const forum = computed(() => forumsStore.getForum(props.id))
 const threads = computed(() => {
-  return forum.value.threads.map((threadId) => useThreadsStore().getThread(threadId))
+  return forum.value.threads.map((threadId) => threadsStore.getThread(threadId))
 })
 </script>
 

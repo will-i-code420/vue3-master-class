@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { useThreadsStore } from '@/stores/threads'
+import { useForumsStore } from '@/stores/forums'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,7 +27,20 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/ForumView.vue'),
-      props: true
+      props: true,
+      beforeEnter: async (to) => {
+        const forumsStore = useForumsStore()
+        await forumsStore.initForum(to.params.id)
+        const forumExists = forumsStore.forums.find((forum) => forum.id === to.params.id)
+        if (!forumExists) {
+          return {
+            name: 'NotFound',
+            params: { pathMatch: to.path.substring(1).split('/') },
+            query: to.query,
+            hash: to.hash
+          }
+        }
+      }
     },
     {
       path: '/forum/:forumId/thread/create',
@@ -47,7 +61,7 @@ const router = createRouter({
       props: true,
       beforeEnter: async (to) => {
         const threadsStore = useThreadsStore()
-        await threadsStore.fetchThread(to.params.id)
+        await threadsStore.initSingleThread(to.params.id)
         const threadExists = threadsStore.threads.find((thread) => thread.id === to.params.id)
         if (!threadExists) {
           return {
