@@ -9,8 +9,12 @@ const props = defineProps({
     required: true
   }
 })
-const category = computed(() => useCategoriesStore().getCategory(props.id))
-const forums = computed(() => useForumsStore().getForums(props.id))
+const categoriesStore = useCategoriesStore()
+const forumsStore = useForumsStore()
+const category = computed(() => categoriesStore.getCategory(props.id))
+const forums = computed(() => {
+  return category.value.forums.map((forumId) => forumsStore.getForum(forumId))
+})
 </script>
 
 <template>

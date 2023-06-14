@@ -23,7 +23,11 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/CategoryView.vue'),
-      props: true
+      props: true,
+      beforeEnter: async (to) => {
+        const categoriesStore = useCategoriesStore()
+        await categoriesStore.initCategory(to.params.id)
+      }
     },
     {
       path: '/forum/:id',
@@ -36,8 +40,7 @@ const router = createRouter({
       beforeEnter: async (to) => {
         const forumsStore = useForumsStore()
         await forumsStore.initForum(to.params.id)
-        const forumExists = forumsStore.forums.find((forum) => forum.id === to.params.id)
-        if (!forumExists) {
+        if (!forumsStore.forums) {
           return {
             name: 'NotFound',
             params: { pathMatch: to.path.substring(1).split('/') },

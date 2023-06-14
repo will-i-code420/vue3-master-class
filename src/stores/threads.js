@@ -62,6 +62,15 @@ export const useThreadsStore = defineStore('threads', () => {
     addThread(thread)
     return thread
   }
+  async function fetchThreads(ids) {
+    ids.forEach(async (id) => {
+      const thread = await getFirestoreDoc({
+        collection: 'threads',
+        id
+      })
+      addThread(thread)
+    })
+  }
   async function updateThread(threadEdit) {
     const thread = findById(threads.value, threadEdit.threadId)
     const post = usePostsStore().getPost(thread.posts[0])
@@ -76,6 +85,7 @@ export const useThreadsStore = defineStore('threads', () => {
     getThread,
     addThread,
     fetchThread,
+    fetchThreads,
     getThreads,
     addPostId,
     addContributor,
