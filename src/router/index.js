@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { useThreadsStore } from '@/stores/threads'
 import { useForumsStore } from '@/stores/forums'
+import { useCategoriesStore } from '@/stores/categories'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +10,11 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      beforeEnter: async () => {
+        const categoriesStore = useCategoriesStore()
+        await categoriesStore.initHome()
+      }
     },
     {
       path: '/category/:id',
@@ -62,8 +67,8 @@ const router = createRouter({
       beforeEnter: async (to) => {
         const threadsStore = useThreadsStore()
         await threadsStore.initSingleThread(to.params.id)
-        const threadExists = threadsStore.threads.find((thread) => thread.id === to.params.id)
-        if (!threadExists) {
+
+        if (!threadsStore.threads) {
           return {
             name: 'NotFound',
             params: { pathMatch: to.path.substring(1).split('/') },

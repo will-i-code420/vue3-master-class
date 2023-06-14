@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, collection, query, where, getDoc, getDocs } from 'firebase/firestore'
 
 const findById = (resources, id) => {
   if (!resources) return null
@@ -45,4 +45,20 @@ const getFirestoreDoc = async ({ collection, id }) => {
   }
 }
 
-export { findById, upsert, guidGenerator, appendChildToParent, getFirestoreDoc }
+const getFirestoreDocs = async ({ path, fieldPath, id }) => {
+  let q
+  if (id) {
+    q = query(collection(db, path), where(fieldPath, '==', id))
+  } else {
+    q = query(collection(db, path))
+  }
+  const querySnapshot = await getDocs(q)
+  const resources = []
+  querySnapshot.forEach((doc) => {
+    const resource = { ...doc.data(), id: doc.id }
+    resources.push(resource)
+  })
+  return resources
+}
+
+export { findById, upsert, guidGenerator, appendChildToParent, getFirestoreDoc, getFirestoreDocs }
