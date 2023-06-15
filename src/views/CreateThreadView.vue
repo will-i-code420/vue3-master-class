@@ -11,7 +11,8 @@ const props = defineProps({
     required: true
   }
 })
-const forum = computed(() => useForumsStore().getForum(props.forumId))
+const forumsStore = useForumsStore()
+const forum = computed(() => forumsStore.getForum(props.forumId))
 async function saveThread(evData) {
   const newThread = {
     ...evData,

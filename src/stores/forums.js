@@ -18,6 +18,9 @@ export const useForumsStore = defineStore('forums', () => {
       await useUsersStore().fetchUser(thread.userId)
     })
   }
+  async function initCreateThread(id) {
+    await fetchForum(id)
+  }
   async function fetchForum(id) {
     const forum = await getFirestoreDoc({
       collection: 'forums',
@@ -38,5 +41,14 @@ export const useForumsStore = defineStore('forums', () => {
   function addForum(forum) {
     upsert(forums.value, forum)
   }
-  return { forums, fetchForum, fetchForums, getForum, getForums, addNewThreadId, initForum }
+  return {
+    forums,
+    fetchForum,
+    fetchForums,
+    getForum,
+    getForums,
+    addNewThreadId,
+    initForum,
+    initCreateThread
+  }
 })

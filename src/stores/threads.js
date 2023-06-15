@@ -54,6 +54,7 @@ export const useThreadsStore = defineStore('threads', () => {
       if (post) usePostsStore().addPost(post)
     })
   }
+
   async function fetchThread(id) {
     const thread = await getFirestoreDoc({
       collection: 'threads',
