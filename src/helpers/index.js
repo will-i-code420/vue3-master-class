@@ -1,5 +1,14 @@
 import { db } from '@/config/firebase'
-import { doc, collection, query, where, getDoc, getDocs } from 'firebase/firestore'
+import {
+  doc,
+  collection,
+  query,
+  where,
+  getDoc,
+  getDocs,
+  addDoc,
+  Timestamp
+} from 'firebase/firestore'
 
 const findById = (resources, id) => {
   if (!resources) return null
@@ -61,4 +70,22 @@ const getFirestoreDocs = async ({ path, fieldPath, id }) => {
   return resources
 }
 
-export { findById, upsert, guidGenerator, appendChildToParent, getFirestoreDoc, getFirestoreDocs }
+const createFirestoreDoc = async ({ path, docData }) => {
+  // Add a new document with a generated id.
+  const newDoc = {
+    ...docData,
+    createdAt: Timestamp.now()
+  }
+  const docRef = await addDoc(collection(db, path), newDoc)
+  console.log('Document written with ID: ', docRef.id)
+}
+
+export {
+  findById,
+  upsert,
+  guidGenerator,
+  appendChildToParent,
+  getFirestoreDoc,
+  getFirestoreDocs,
+  createFirestoreDoc
+}

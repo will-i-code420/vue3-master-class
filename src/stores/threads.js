@@ -32,8 +32,6 @@ export const useThreadsStore = defineStore('threads', () => {
     appendChildToParent({ child: 'contributors' })(threads.value, { parentId, childId })
   }
   async function createThread(newThread) {
-    newThread.id = guidGenerator()
-    newThread.publishedAt = Date.now() / 1000
     newThread.userId = useUsersStore().authId
     newThread.posts = []
     addThread(newThread)
