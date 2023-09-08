@@ -10,15 +10,18 @@ const props = defineProps({
   }
 })
 const categoriesStore = useCategoriesStore()
-const forumsStore = useForumsStore()
-const category = computed(() => categoriesStore.getCategory(props.id))
-const forums = computed(() => {
-  return category.value.forums.map((forumId) => forumsStore.getForum(forumId))
-})
+const category = computed(() => categoriesStore.getCategory(props.id) || {})
+function getCategoryForums(id) {
+  return useForumsStore().forums.filter((forum) => forum.categoryId === id)
+}
 </script>
 
 <template>
-  <ForumList :title="category.name" :forums="forums" :categoryId="id" />
+  <ForumList
+    :title="category.name"
+    :forums="getCategoryForums(category.id)"
+    :categoryId="category.id"
+  />
 </template>
 
 <style scoped></style>

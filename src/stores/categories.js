@@ -14,7 +14,9 @@ export const useCategoriesStore = defineStore('categories', () => {
   }
   async function initCategory(id) {
     const category = await fetchCategory(id)
-    await useForumsStore().fetchForums(category.forums)
+    categories.value.push(category)
+    const forumIds = [...category.forums]
+    await useForumsStore().fetchForums(forumIds)
   }
   async function fetchCategory(id) {
     const category = await getFirestoreDoc({
