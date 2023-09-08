@@ -18,7 +18,7 @@ const forums = computed(() => {
 </script>
 
 <template>
-  <ForumList :title="category.name" :forums="forums" />
+  <ForumList :title="category.name" :forums="forums" :categoryId="id" />
 </template>
 
 <style scoped></style>
