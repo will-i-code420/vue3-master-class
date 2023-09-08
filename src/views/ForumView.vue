@@ -10,11 +10,10 @@ const props = defineProps({
   }
 })
 const forumsStore = useForumsStore()
-const threadsStore = useThreadsStore()
 const forum = computed(() => forumsStore.getForum(props.id))
-const threads = computed(() => {
-  return forum.value.threads.map((threadId) => threadsStore.getThread(threadId))
-})
+function getForumThreads() {
+  return forum.value.threads.map((threadId) => useThreadsStore().getThread(threadId))
+}
 </script>
 
 <template>
@@ -80,7 +79,7 @@ const threads = computed(() => {
     </div>
     -->
     <div class="col-full mt-3">
-      <ThreadList :threads="threads" />
+      <ThreadList :threads="getForumThreads()" />
       <!-- 
         TODO: Implement Pagination
         <div class="pagination">

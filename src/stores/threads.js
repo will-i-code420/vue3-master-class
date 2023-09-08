@@ -15,10 +15,10 @@ export const useThreadsStore = defineStore('threads', () => {
         return findById(useUsersStore().users, thread.userId)
       },
       get repliesCount() {
-        if (thread.posts.length > 1) {
-          return thread.posts.length - 1
-        } else {
+        if (!thread.posts || thread.posts.length < 1) {
           return 0
+        } else {
+          return thread.posts.length - 1
         }
       },
       get contributorsCount() {
@@ -65,6 +65,7 @@ export const useThreadsStore = defineStore('threads', () => {
     if (thread) {
       addThread(thread)
     }
+    return thread
   }
   async function fetchThreads(ids) {
     ids.forEach(async (id) => {
