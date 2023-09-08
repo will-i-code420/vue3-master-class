@@ -2,7 +2,6 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useForumsStore } from './forums'
 import { findById, upsert, getFirestoreDoc, getFirestoreDocs } from '@/helpers'
-import { useThreadsStore } from './threads'
 
 export const useCategoriesStore = defineStore('categories', () => {
   const categories = ref([])
@@ -12,7 +11,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     categories.value = docs
     const forumIds = docs.map((doc) => doc.forums).flat()
     await useForumsStore().fetchForums(forumIds)
-    await useThreadsStore().fetchThreads(forumIds)
   }
   async function initCategory(id) {
     const category = await fetchCategory(id)

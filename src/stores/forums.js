@@ -35,7 +35,9 @@ export const useForumsStore = defineStore('forums', () => {
         collection: 'forums',
         id
       })
-      addForum(forum)
+      if (forum) {
+        addForum(forum)
+      }
     })
   }
   function addForum(forum) {
