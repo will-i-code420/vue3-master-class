@@ -14,8 +14,6 @@ const props = defineProps({
 const threadsStore = useThreadsStore()
 const postsStore = usePostsStore()
 
-// thread.value.posts.map((postId) => usePostsStore().getPost(postId))
-
 const thread = computed(() => threadsStore.getThread(props.id))
 const threadPosts = computed(() => {
   return thread.value.posts.map((postId) => postsStore.getPost(postId))
